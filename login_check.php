@@ -6,10 +6,10 @@
 		(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521)))
 		(CONNECT_DATA=(SERVICE_NAME=XE)))";
     $url = "oci:dbname=".$tns.";charset=utf8";
-    $username = 'term_project';
-    $password = '457845';
-    $ID = strval($_POST['ID']) ?? '';
-    $PWD = strval($_POST['PWD']) ?? '';
+    $username = 'CNU_RENTCAR';
+    $password = '0000';
+    $ID = $_POST['ID'];
+    $PWD = $_POST['PWD'];
     try {
         $conn = new PDO($url, $username, $password);
     } catch (PDOException $e) {
@@ -21,8 +21,9 @@
     while ($row = $stmt -> fetch(PDO::FETCH_NUM)) {
         $_SESSION['name'] =  $row[0];
         $_SESSION['email'] = $row[1];
+        $_SESSION['id'] = $ID;
     }
-    
+
     if(!isset($_SESSION['name']) || !isset($_SESSION['email'])) {
         echo ("<script>
                 alert('아이디와 비밀번호를 확인해주세요!');

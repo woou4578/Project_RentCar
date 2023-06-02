@@ -8,7 +8,11 @@
     <title>관리자 메인 화면</title>
 </head>
 <body>
-    <h1>CNU 렌터카</h1>
+    <h1>CNU RentCar</h1>
+    <form action = "logout.php">
+        <span>어서오세요! <?php echo $_SESSION['name']?> 님!</span>
+        <button>로그아웃</button>
+    </form>
 
     <div class='mainDiv'>
         <h2>검색</h2>
