@@ -34,7 +34,6 @@ function click_search() {
             error:function(e) {
                 alert(e.reponseText);
             }
-
         });
     }
 }

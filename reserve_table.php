@@ -52,10 +52,7 @@ $sql = "SELECT R1.LICENSEPLATENO, R1.MODELNAME, C1.VEHICLETYPE
         AND R2.MODELNAME = C2.MODELNAME ".$selectSpecificType2;
 $stmt = $conn -> prepare($sql);
 $stmt -> execute();
-$arr = Array();
-$numnum = 0;
 while ($row = $stmt -> fetch(PDO::FETCH_NUM)) {
-    array_push($arr, $row[0]);
     echo "<tr> <td> <input type='radio' name='reserveRadio'> </td>";
     echo "<td>".$row[0]."</td>";
     echo "<td>".$row[1]."</td>";
