@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>예약화면</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="reserve.css">
+</head>
+
+<body>
+    <h1>CNU RentCar</h1>
+    <div>
+        <span>예약일 설정: </span>
+        <input type="date" name="startDate" id="startDate">
+        <input type="date" name="endDate" id="endDate">
+        <br>
+        <span>차종 설정: </span>
+        <select id="mySelect">
+            <option value="">-차종 선택-</option>
+            <option value="전체">전체</option>
+            <option value="SUV">SUV</option>
+            <option value="소형">소형</option>
+            <option value="전기차">전기차</option>
+            <option value="대형">대형</option>
+        </select>
+    </div>
+    <br>
+    <button type="button" id="searchButton">검색</button>
+    <br>
+    <div id="reserveDiv">
+        <h2>예약 가능한 렌트카 목록</h2>
+        <table id="reserveTable"></table>
+        <br>
+        <button type="button" id="reserveButton">예약</button>
+    </div>
+</body>
+<script src="reserve.js"></script>
+
+</html>
+
+
+
+<!-- <script>
+    function To_main() {
+        if(document.getElementsByTagName("span")[0].getAttribute("id") == '관리자') location.href="root_main.php";
+        else location.href="user_main.php";
+    }    
+
+    function click_reserve() {
+        const var1 = document.getElementById('reserveTable');
+        const varRadio = document.getElementsByName('reserveRadio');
+        var var2 = var1.children[1].childElementCount;
+        var selectedIndex = -1;
+        for(let i = 0; i < varRadio.length; i++) {
+            if(varRadio[i].checked === true) {
+                selectedIndex = i;
+                break;
+            }
+        }
+        // var var4 = "";
+        
+        if(selectedIndex == -1) {
+            alert('차가 선택되지 않았습니다.');
+        }else {
+            // var var3 = varRadio[selectedIndex];
+            // var4 = var3.parentElement.nextElementSibling.innerHTML;
+            $.ajax({
+                url:"reserve.php",
+                type:"POST",
+                data: {indexVal : 2}, 
+                success: function(result) {
+                    if (result) {
+                        alert("성공.");
+                    } else {
+                        alert("실패.");
+                    }
+                },
+                error: function() {
+                    alert("에러 발생");
+                }
+            })
+        }    
+    }
+
+</script> -->
+            <!-- </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><?= ++$numnum ?></td>
+            <td><input type="radio" name="reserveRadio"></td>
+            <td><?= $row[0] ?></td>
+            <td><?= $row[1] ?></td>
+            <td><?= $row[2] ?></td>
+        </tr> 
+        </tbody>
+    </table>
+
+    <form method="get">
+        <br>
+        <input type="submit" id="reserveButton" name="reserveButton" 
+            onclick="click_reserve()" value="예약" style="display: none">
+    </form>
+    
+    <script src="reserve.js"></script> -->
