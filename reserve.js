@@ -67,6 +67,8 @@ function add_reserve() {
         });
     }
 }
-
+function To_main() {
+    location.href = "user_main.php";
+}
 reserveButton.addEventListener("click", add_reserve);
 searchButton.addEventListener("click", click_search);

@@ -1,6 +1,6 @@
 <?php 
     session_start();
-    if(!isset($_SESSION['name'])) header('Location: http://localhost/CNU_RENTCAR/login.php');
+    if(!isset($_SESSION['name'])) header('Location: login.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,6 +33,6 @@
 <?php
     function movePage($addr) {echo "<script>location.href='".$addr."'</script>";}
     // submit의 name이 array_key_exists 에서 접근함
-    if(array_key_exists('firstBtn1',$_POST)){movePage("searchRentCar.php");}
+    if(array_key_exists('firstBtn1',$_POST)){movePage("search_rentCar.php");}
     if(array_key_exists('firstBtn2',$_POST)) {movePage("statistics.php");}
 ?>

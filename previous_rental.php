@@ -1,13 +1,14 @@
 <?php 
     session_start();
-    if(!isset($_SESSION['name'])) header('Location: http://localhost/CNU_RENTCAR/login.php');
+    if(!isset($_SESSION['name'])) header('Location: login.php');
     $tns = "
     (DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521)))
     (CONNECT_DATA=(SERVICE_NAME=XE)))";
     $url = "oci:dbname=".$tns.";charset=utf8";
     $username = 'CNU_RENTCAR';
     $password = '0000';
-    $searchWord = $_GET['searchWord'] ?? '';
+    $startDate = $_GET['startDate'] ?? "2023-01-01";
+    $endDate = $_GET['endDate'] ?? "2023-05-01";
     try {
         $conn = new PDO($url, $username, $password);
     } catch (PDOException $e) {
@@ -26,11 +27,11 @@
         <button>로그아웃</button>
     </form>
 
-    <h2>이전 대여 렌트카 목록</h2>
+    <h2>나의 이전 대여 내역</h2>
     <table>
         <thead>
             <tr>
-                <th>차량번호</th>
+                <th>차번호</th>
                 <th>모델명</th>
                 <th>차종</th>
                 <th>대여 일자</th>
@@ -40,19 +41,19 @@
         </thead>
         <tbody>
     <?php
-    if(is_numeric($searchWord)!=1) {
-        $sql = "SELECT P.licensePlateNo, R.modelName, Car.vehicleType, P.dateRented, P.dateReturned, P.payment FROM PreviousRental P, RentCar R, CarModel Car, Customer C
-            WHERE C.cno = :cno AND C.cno = P.cno AND P.licensePlateNo = R.licensePlateNo AND R.modelName = Car.modelName
-            AND ((R.modelName LIKE '%' || :searchWord || '%') OR (Car.vehicleType LIKE '%' || :searchWord || '%'))";
-    } else {
-        $sql = "SELECT P.licensePlateNo, R.modelName, Car.vehicleType, P.dateRented, P.dateReturned, P.payment FROM PreviousRental P, RentCar R, CarModel Car, Customer C
-            WHERE C.cno = :cno AND C.cno = P.cno AND P.licensePlateNo = R.licensePlateNo AND R.modelName = Car.modelName
-            AND ((P.licensePlateNo LIKE '%' || :searchWord || '%') OR (P.payment LIKE '%' || :searchWord || '%'))";
+    if(strtotime($startDate) > strtotime($endDate)) {
+        echo "<script>alert('날짜를 확인해주세요');
+        location.href='./previous_rental.php';</script>";
     }
+    $sql = "SELECT P.licensePlateNo, R.modelName, Car.vehicleType, P.dateRented, P.dateReturned, P.payment FROM PreviousRental P, RentCar R, CarModel Car, Customer C
+        WHERE C.cno = :cno AND C.cno = P.cno AND P.licensePlateNo = R.licensePlateNo AND R.modelName = Car.modelName AND TO_DATE(:startDate, 'YYYY/MM/DD') <= P.dateRented AND P.dateReturned <= TO_DATE(:endDate, 'YYYY/MM/DD')
+        ORDER BY 5 DESC";
     $stmt = $conn -> prepare($sql);
     $stmt -> bindParam(':cno', $_SESSION['id'], PDO::PARAM_STR);
-    $stmt -> bindParam(':searchWord', $searchWord, PDO::PARAM_STR);
+    $stmt -> bindParam(':startDate', $startDate, PDO::PARAM_STR);
+    $stmt -> bindParam(':endDate', $endDate, PDO::PARAM_STR);
     $stmt -> execute();
+    $num = 0;
     while ($row = $stmt -> fetch(PDO::FETCH_NUM)) {
     ?>
         <tr>
@@ -62,16 +63,25 @@
             <td><?= $row[3] ?></td>
             <td><?= $row[4] ?></td>
             <td><?= $row[5] ?></td>
+            <?php $num++; ?>
         </tr>
-    <?php } ?>
+    <?php } 
+    if ($num == 0) {
+        echo "<script>alert('날짜를 확인해주세요');
+        location.href='./previous_rental.php';</script>";
+    }
+    ?>
         </tbody>
     </table>
 
     <form>
         <div>
-            <label for="searchWord">검색 내용 : </label>
-            <input type="text" id="searchWord" name="searchWord" placeholder="검색어 입력" value="<?= $searchWord ?>">
+            <label for="startDate"> 검색 시작 날짜 : </label>
+            <input type="date" id="startDate" name="startDate" max="2023-05-01" value="<?= $searchWord ?>"> ~ 
+            <label for="endDate"> 검색 종료 날짜 : </label>
+            <input type="date" id="endDate" name="endDate" max="2023-05-01" value="<?= $searchWord ?>">
         </div>
+        <br>
         <div>
             <button type="submit">검색</button>
         </div>

@@ -7,7 +7,7 @@
 
 <h3 style="text-align: center">CNU RentCar</h3>
 
-<form action="./login_check.php" method="post" style="text-align: center">  <!-- 로그인/로그아웃 -->
+<form action="login_check.php" method="post" style="text-align: center">  <!-- 로그인/로그아웃 -->
     <label for="ID">아이디</label> 
     <input type="text" id="ID" name="ID" placeholder="아이디"> <br><br>
     <label for="PWD">비밀번호</label> 

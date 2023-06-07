@@ -23,10 +23,9 @@ try {
 
 $ID = $_SESSION['id'];
 $sql2 = "DELETE FROM RESERVATION WHERE CNO = '".$ID."' AND
-    STARTDATE = TO_DATE( '".$startDate."', 'YY/MM/DD')";
+    STARTDATE = TO_DATE('".$startDate."', 'YY/MM/DD')";
 
 $stmt = $conn->prepare($sql2);
 $stmt -> execute();
-
 echo "예약 취소되었습니다.";
 ?>

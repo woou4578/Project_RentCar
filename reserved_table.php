@@ -19,12 +19,15 @@ try {
     echo ("에러 내용: " . $e->getMessage());
 }
 
-$ID = $_SESSION['id'];
 echo "<tr><th>선택</th><th>차번호</th>
-    <th>예약날짜</th><th>렌트시작날짜</th>
-    <th>렌트종료날짜</th><th>ID</th></tr>";
+    <th>모델명</th><th>예약날짜</th>
+    <th>렌트시작날짜</th><th>렌트종료날짜</th></tr>";
 
-$sql = "SELECT * FROM RESERVATION WHERE CNO = '" . $ID . "'";
+$sql = "SELECT R1.LICENSEPLATENO, R2.MODELNAME , R1.RESERVEDATE, R1.STARTDATE, R1.ENDDATE
+FROM RESERVATION R1, RENTCAR R2
+WHERE R1.LICENSEPLATENO = R2.LICENSEPLATENO
+AND R1.CNO = '".$_SESSION['id']."'
+ORDER BY 3, 2";
 $stmt = $conn -> prepare($sql);
 $stmt -> execute();
 while ($row = $stmt->fetch(PDO::FETCH_NUM)) {

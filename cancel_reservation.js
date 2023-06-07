@@ -10,9 +10,8 @@ function cancel_my_reservation() {
             break;
         }
     }
-    var selectedElement = reservedTable.children[0].children[selectedIndex+1].children[3];
+    var selectedElement = reservedTable.children[0].children[selectedIndex+1].children[4];
     var selectedStartDate = selectedElement.innerHTML;
-    alert(selectedStartDate);
     if(selectedStartDate.length > 0) {
         $.ajax({    
             url: 'cancel_reservation.php',
@@ -21,8 +20,10 @@ function cancel_my_reservation() {
                 startDate : selectedStartDate
             },
             success:function(data) {
-                alert(data);
-                window.location.href = 'user_main.php';
+                // alert(data);
+                // document.location.href = 'user_main.php';
+                // alert(date.length);
+                setTimeout(location.href='user_main.php', 1000);
             },
             error:function(e) {
                 alert(e.reponseText);
@@ -46,11 +47,9 @@ function show_my_reservation() {
 }
 
 function To_main() {
-    if(document.getElementsByTagName("span")[0].getAttribute("id") == "관리자"){
-        location.href = "root_main.php";
-    }else {
-        location.href = "user_main.php";
-    }
+    location.href = "user_main.php";
 }
 
-cancelButton.addEventListener("click", cancel_my_reservation);
+window.onload = function(){
+    cancelButton.addEventListener("click", cancel_my_reservation);
+}
