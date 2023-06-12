@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style type="text/css">
+         * {
+            font-size: 20px;
+        }
+        body {
+            margin: 30px;
+        }
+        table {
+            width: 100%;
+            border: 1px solid #444;
+            border-collapse: collapse;
+            text-align: center;
+            box-shadow: 1px 1px;
+        }
+        tr, td, th {
+            border: 1px solid #444;
+            padding: 4px;
+        }
+        h2 {
+            margin-left: 15px;
+            font-size: 27px;
+        }
+    </style>
+    <title>고객 메인 화면</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body onload="javascript:startSetting()">
+    <h1><Img src="./Logo.png"></Img></h1>
+    <form action = "logout.php" style="position: absolute; right: 30px;">
+        <span id="nowName"></span>
+        <span>님이 로그인하였습니다.</span>
+        <button>로그아웃</button>
+    </form>
+    <br>
+    <br>
+    <div style="position: absolute; right: 30px;">
+        <span id="todayDate"> </span>
+        <button type="button" id="changeDateButton">날짜 바꾸기</button>
+    </div>
+    <span id="checkSpan"></span>
+    <br>
+    <div class='mainDiv'>
+        <h2>검색</h2>
+        <br>
+        <button type="button" name="firstBtn1" class="main_button" 
+            onClick="location.href='search_rentCar.php'">렌터카 검색</button>
+        <br><br>
+        <button type="button" name="firstBtn2" class="main_button"
+            onClick="location.href='previous_rental.php'">나의 이전 렌탈 내역</button>
+        <br><br>
+    </div>
+    
+    <div class='mainDiv'>
+        <h2>예약 / 반납</h2>
+        <br>
+        <button type="button" name="secondBtn1" class="main_button"
+            onClick="location.href='reserve.html'">예약하기</button>
+        <br><br>
+        <button type="button" name="secondBtn2" class="main_button"
+            onClick="location.href='cancel_reservation.html'">예약 취소</button>
+        <br><br>
+        <button type="button" name="secondBtn3" class="main_button"
+            onClick="location.href='return_car.html'">반납하기</button>
+    </div>
+    <script src="user_main.js"></script>
+</body>
+</html>
