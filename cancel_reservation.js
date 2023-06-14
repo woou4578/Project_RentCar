@@ -20,10 +20,8 @@ function cancel_my_reservation() {
                 startDate : selectedStartDate
             },
             success:function(data) {
-                // alert(data);
-                // document.location.href = 'user_main.php';
-                // alert(date.length);
-                setTimeout(location.href='user_main.php', 1000);
+                alert(data);
+                window.location.href = 'user_main.html';
             },
             error:function(e) {
                 alert(e.reponseText);
@@ -47,9 +45,7 @@ function show_my_reservation() {
 }
 
 function To_main() {
-    location.href = "user_main.php";
+    location.href = "user_main.html";
 }
 
-window.onload = function(){
-    cancelButton.addEventListener("click", cancel_my_reservation);
-}
+cancelButton.addEventListener("click", cancel_my_reservation);

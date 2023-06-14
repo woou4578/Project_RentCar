@@ -1,9 +1,4 @@
 <?php 
-error_reporting( E_ALL );
-ini_set( "display_errors", 1 );
-?>
-
-<?php 
 $startDate = $_GET['startDate'] ?? '';
 
 session_start();
@@ -22,10 +17,11 @@ try {
 }
 
 $ID = $_SESSION['id'];
-$sql2 = "DELETE FROM RESERVATION WHERE CNO = '".$ID."' AND
-    STARTDATE = TO_DATE('".$startDate."', 'YY/MM/DD')";
-
+$sql2 = "DELETE FROM RESERVATION WHERE CNO = :ID AND STARTDATE = TO_DATE(:startDate, 'YY/MM/DD')";
 $stmt = $conn->prepare($sql2);
+$stmt -> bindParam(':ID', $ID, PDO::PARAM_STR);
+$stmt -> bindParam(':startDate', $startDate, PDO::PARAM_STR);
 $stmt -> execute();
+
 echo "예약 취소되었습니다.";
 ?>

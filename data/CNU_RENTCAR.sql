@@ -61,93 +61,149 @@ CREATE TABLE PreviousRental (
     CONSTRAINT fk_previsourental_cno FOREIGN KEY(cno) REFERENCES Customer(cno) 
 );
 
--- 관리자는 본인 이메일
-INSERT INTO Customer VALUES ('root', '관리자', 'root!', 'haijun79@naver.com');
-INSERT INTO Customer VALUES ('202200001', '이짱구', '0001!', 'leejg12@gmail.com');
-INSERT INTO Customer VALUES ('202200002', '박철수', '0002!', 'parkcs23@gmail.com');
-INSERT INTO Customer VALUES ('202200003', '김맹구', '0003!', 'kimmg34@gmail.com');
-INSERT INTO Customer VALUES ('202300001', '신유리', '0001!', 'shinyr45@gmail.com');
-INSERT INTO Customer VALUES ('202300002', '백형만', '0002!', 'paekhm56@gmail.com');
-INSERT INTO Customer VALUES ('202300003', '최송아', '0003!', 'choish67@gmail.com');
+-- 관리자 이메일은 공용 이메일
+-- 이짱구 이메일만 확인용 실제 이메일로
+INSERT INTO Customer VALUES ('root', '관리자', 'root!', 'cnu.rentcar10@gmail.com');
+INSERT INTO Customer VALUES ('202200001', '이짱구', '0001!', 'haijun79@naver.com');
+INSERT INTO Customer VALUES ('202200002', '박철수', '0002!', 'parkcs23@gmail.co');
+INSERT INTO Customer VALUES ('202200003', '김맹구', '0003!', 'kimmg34@gmail.co');
+INSERT INTO Customer VALUES ('202300001', '신유리', '0001!', 'shinyr45@gmail.co');
+INSERT INTO Customer VALUES ('202300002', '백형만', '0002!', 'paekhm56@gmail.co');
+INSERT INTO Customer VALUES ('202300003', '최송아', '0003!', 'choish67@gmail.co');
 SELECT * FROM Customer;
 
-INSERT INTO CarModel VALUES ('스파크', '소형', 40000, '디젤', 5);
-INSERT INTO CarModel VALUES ('쏘나타', '전기차', 45000, '전기', 5);
-INSERT INTO CarModel VALUES ('투싼', 'SUV', 55000, '가솔린', 5);
-INSERT INTO CarModel VALUES ('쏘렌토', 'SUV', 60000, '가솔린', 6);
-INSERT INTO CarModel VALUES ('카니발', '대형', 70000, '디젤', 9);
+insert into carmodel
+values('아반떼', '소형', 100000, '디젤', 5);
+insert into carmodel
+values('쏘나타', '대형', 130000, '디젤', 5);
+insert into carmodel
+values('투싼', 'SUV', 140000, '가솔린', 5);
+insert into carmodel
+values('스타렉스', '승합', 170000, '가솔린', 8);
+insert into carmodel
+values('G80', '전기', 120000, '전기', 5);
 SELECT * FROM CarModel;
 
--- 2023년 5월 2일 00시 기준
-INSERT INTO RentCar VALUES ('180001', '스파크', TO_DATE('04/30/23', 'MM/DD/YY'), TO_DATE('05/03/23', 'MM/DD/YY'), '202300003');
-INSERT INTO RentCar VALUES ('190001', '스파크', NULL, NULL, NULL);
-INSERT INTO RentCar VALUES ('180002', '쏘나타', NULL, NULL, NULL);
-INSERT INTO RentCar VALUES ('190002', '쏘나타', TO_DATE('04/25/23', 'MM/DD/YY'), TO_DATE('05/05/23', 'MM/DD/YY'), '202200002');
-INSERT INTO RentCar VALUES ('190003', '투싼', NULL, NULL, NULL);
-INSERT INTO RentCar VALUES ('200001', '투싼', TO_DATE('05/01/23', 'MM/DD/YY'), TO_DATE('05/03/23', 'MM/DD/YY'), '202200003');
-INSERT INTO RentCar VALUES ('190004', '쏘렌토', TO_DATE('05/01/23', 'MM/DD/YY'), TO_DATE('05/02/23', 'MM/DD/YY'), '202300001');
-INSERT INTO RentCar VALUES ('190005', '쏘렌토', NULL, NULL, NULL);
-INSERT INTO RentCar VALUES ('210001', '쏘렌토', TO_DATE('04/20/23', 'MM/DD/YY'), TO_DATE('05/05/23', 'MM/DD/YY'), '202200001');
-INSERT INTO RentCar VALUES ('200002', '카니발', NULL, NULL, NULL);
+-- 2023년 6월 21일 00시 기준으로
+-- 이짱구로 로그인한다는 가정
+-- 기간 정하고, 빌릴 사람 정하기
+insert into rentcar
+values('50 허 4313', '아반떼', NULL, NULL, NULL);
+insert into rentcar
+values('50 허 2314', '아반떼', '2023-06-01', '2023-06-23', '202200002');
+insert into rentcar
+values('50 허 9450', '쏘나타', '2023-06-19', '2023-06-25', '202200003');
+insert into rentcar
+values('50 허 6745', '쏘나타', NULL, NULL, NULL);
+insert into rentcar
+values('50 허 2261', '쏘나타', NULL, NULL, NULL);
+
+-- 여기에 날짜가 바뀌면
+-- 예약에서 대여 상태로 넘어와 데이터에 넣도록 한다.
+-- 고객은 이짱구로
+insert into rentcar
+values('50 허 6589', '쏘나타', NULL, NULL, NULL);
+
+insert into rentcar
+values('50 허 3158', '투싼', '2023-06-20', '2023-06-23', '202300001');
+insert into rentcar
+values('50 허 1234', '스타렉스', '2023-06-15', '2023-06-30', '202300002');
+insert into rentcar
+values('50 허 6894', 'G80', '2023-06-19', '2023-06-24', '202300003');
+insert into rentcar
+values('50 허 6703', 'G80', NULL, NULL, NULL);
 SELECT * FROM RentCar;
 
-INSERT INTO Reservation VALUES ('180001', TO_DATE('04/29/23', 'MM/DD/YY'), TO_DATE('05/04/23', 'MM/DD/YY'), TO_DATE('05/05/23', 'MM/DD/YY'), '202300002');
-INSERT INTO Reservation VALUES ('180001', TO_DATE('04/21/23', 'MM/DD/YY'), TO_DATE('05/06/23', 'MM/DD/YY'), TO_DATE('05/10/23', 'MM/DD/YY'), '202300003');
-INSERT INTO Reservation VALUES ('180001', TO_DATE('04/22/23', 'MM/DD/YY'), TO_DATE('05/12/23', 'MM/DD/YY'), TO_DATE('05/13/23', 'MM/DD/YY'), '202200001');
-INSERT INTO Reservation VALUES ('210001', TO_DATE('04/20/23', 'MM/DD/YY'), TO_DATE('05/07/23', 'MM/DD/YY'), TO_DATE('05/09/23', 'MM/DD/YY'), '202200002');
-INSERT INTO Reservation VALUES ('210001', TO_DATE('05/01/23', 'MM/DD/YY'), TO_DATE('05/15/23', 'MM/DD/YY'), TO_DATE('05/20/23', 'MM/DD/YY'), '202200001');
-INSERT INTO Reservation VALUES ('210001', TO_DATE('05/01/23', 'MM/DD/YY'), TO_DATE('05/22/23', 'MM/DD/YY'), TO_DATE('05/24/23', 'MM/DD/YY'), '202300003');
+-- 예약 정하기 렌트 고려해서 넣기 
+-- 차번호 / 예약한날 / 렌트시작날 / 반납예정날 / cno
+insert into reservation
+values ('50 허 6703', '2023-06-12', '2023-06-27', '2023-07-01', '202200003');
+insert into reservation
+values ('50 허 6703', '2023-06-19', '2023-07-02', '2023-07-03', '202200001');
+insert into reservation
+values ('50 허 4313', '2023-06-19', '2023-06-25', '2023-06-30', '202200002');
+insert into reservation
+values ('50 허 4313', '2023-06-15', '2023-07-01', '2023-07-03', '202300001');
+insert into reservation
+values ('50 허 6745', '2023-06-11', '2023-07-13', '2023-07-16', '202300002');
+insert into reservation
+values ('50 허 6745', '2023-06-06', '2023-07-16', '2023-07-18', '202300003');
 SELECT * FROM Reservation;
+--주석 풀지 마세요
+--데모를 위해 아래와 같은 형식의 데이터를 넣을 예정
+--insert into reservation
+--values ('50 허 6589', '2023-06-21', '2023-06-22', '2023-06-25', '202200001');
 
-INSERT INTO Options VALUES ('180001', '블랙박스');
-INSERT INTO Options VALUES ('180001', '후방카메라');
-INSERT INTO Options VALUES ('190001', '블랙박스');
-INSERT INTO Options VALUES ('180002', '블랙박스');
-INSERT INTO Options VALUES ('180002', '후방카메라');
-INSERT INTO Options VALUES ('190002', '블랙박스');
-INSERT INTO Options VALUES ('190002', '내비게이션');
-INSERT INTO Options VALUES ('190002', '후방카메라');
-INSERT INTO Options VALUES ('190003', '블랙박스');
-INSERT INTO Options VALUES ('190003', '내비게이션');
-INSERT INTO Options VALUES ('200001', '블랙박스');
-INSERT INTO Options VALUES ('200001', '내비게이션');
-INSERT INTO Options VALUES ('200001', '후방카메라');
-INSERT INTO Options VALUES ('200001', '가죽시트');
-INSERT INTO Options VALUES ('190004', '블랙박스');
-INSERT INTO Options VALUES ('190004', '내비게이션');
-INSERT INTO Options VALUES ('190005', '블랙박스');
-INSERT INTO Options VALUES ('190005', '내비게이션');
-INSERT INTO Options VALUES ('190005', '후방카메라');
-INSERT INTO Options VALUES ('210001', '블랙박스');
-INSERT INTO Options VALUES ('210001', '내비게이션');
-INSERT INTO Options VALUES ('210001', '후방카메라');
-INSERT INTO Options VALUES ('210001', '가죽시트');
-INSERT INTO Options VALUES ('210001', '열선시트');
-INSERT INTO Options VALUES ('210001', '크루즈 컨트롤');
-INSERT INTO Options VALUES ('200002', '블랙박스');
-INSERT INTO Options VALUES ('200002', '내비게이션');
-INSERT INTO Options VALUES ('200002', '후방카메라');
+insert into options
+values ('50 허 4313', '후방카메라');
+insert into options
+values ('50 허 4313', '썬루프');
+insert into options
+values ('50 허 2314', '후방카메라');
+insert into options
+values ('50 허 9450', '썬루프');
+insert into options
+values ('50 허 9450', '주행보조');
+insert into options
+values ('50 허 9450', '후방카메라');
+insert into options
+values ('50 허 6745', '후방카메라');
+insert into options
+values ('50 허 6745', '썬루프');
+insert into options
+values ('50 허 2261', '후방카메라');
+insert into options
+values ('50 허 6589', '후방카메라');
+insert into options
+values ('50 허 3158', '후방카메라');
+insert into options
+values ('50 허 3158', '주행보조');
+insert into options
+values ('50 허 3158', '썬루프');
+insert into options
+values ('50 허 1234', '후방카메라');
+insert into options
+values ('50 허 1234', '썬루프');
+insert into options
+values ('50 허 1234', '주행보조');
+insert into options
+values ('50 허 6894', '썬루프');
+insert into options
+values ('50 허 6894', '주행보조');
+insert into options
+values ('50 허 6894', '후방카메라');
+insert into options
+values ('50 허 6894', '컴포트 시트');
+insert into options
+values ('50 허 6703', '후방카메라');
+insert into options
+values ('50 허 6703', '주행보조');
 SELECT * FROM Options;
 
-INSERT INTO PreviousRental VALUES ('190005', TO_DATE('04/01/23', 'MM/DD/YY'), TO_DATE('04/03/23', 'MM/DD/YY'), 180000, '202200001');
-INSERT INTO PreviousRental VALUES ('210001', TO_DATE('04/01/23', 'MM/DD/YY'), TO_DATE('04/10/23', 'MM/DD/YY'), 600000, '202200002');
-INSERT INTO PreviousRental VALUES ('190001', TO_DATE('04/10/23', 'MM/DD/YY'), TO_DATE('04/15/23', 'MM/DD/YY'), 240000, '202300003');
-INSERT INTO PreviousRental VALUES ('190003', TO_DATE('04/10/23', 'MM/DD/YY'), TO_DATE('04/20/23', 'MM/DD/YY'), 605000, '202300001');
-INSERT INTO PreviousRental VALUES ('200002', TO_DATE('04/20/23', 'MM/DD/YY'), TO_DATE('04/22/23', 'MM/DD/YY'), 210000, '202300002');
+-- 차번호와 비용계산해서 넣어주기
+-- 사람은 상관없을 듯
+INSERT INTO PreviousRental VALUES ('50 허 4313', TO_DATE('05/02/23', 'MM/DD/YY'), TO_DATE('05/10/23', 'MM/DD/YY'), 900000, '202300003');
+INSERT INTO PreviousRental VALUES ('50 허 2314', TO_DATE('05/09/23', 'MM/DD/YY'), TO_DATE('05/11/23', 'MM/DD/YY'), 300000, '202200001');
+INSERT INTO PreviousRental VALUES ('50 허 6745', TO_DATE('05/12/23', 'MM/DD/YY'), TO_DATE('05/15/23', 'MM/DD/YY'), 520000, '202300001');
+INSERT INTO PreviousRental VALUES ('50 허 6589', TO_DATE('05/20/23', 'MM/DD/YY'), TO_DATE('05/22/23', 'MM/DD/YY'), 390000, '202300002');
+INSERT INTO PreviousRental VALUES ('50 허 1234', TO_DATE('05/21/23', 'MM/DD/YY'), TO_DATE('05/24/23', 'MM/DD/YY'), 680000, '202200001');
+INSERT INTO PreviousRental VALUES ('50 허 6894', TO_DATE('04/01/23', 'MM/DD/YY'), TO_DATE('04/03/23', 'MM/DD/YY'), 360000, '202200001');
+INSERT INTO PreviousRental VALUES ('50 허 6703', TO_DATE('04/01/23', 'MM/DD/YY'), TO_DATE('04/10/23', 'MM/DD/YY'), 1200000, '202200002');
+INSERT INTO PreviousRental VALUES ('50 허 2261', TO_DATE('04/10/23', 'MM/DD/YY'), TO_DATE('04/15/23', 'MM/DD/YY'), 780000, '202300003');
+INSERT INTO PreviousRental VALUES ('50 허 2314', TO_DATE('04/10/23', 'MM/DD/YY'), TO_DATE('04/20/23', 'MM/DD/YY'), 1100000, '202300001');
+INSERT INTO PreviousRental VALUES ('50 허 4313', TO_DATE('04/20/23', 'MM/DD/YY'), TO_DATE('04/22/23', 'MM/DD/YY'), 300000, '202300002');
+INSERT INTO PreviousRental VALUES ('50 허 6703', TO_DATE('03/01/23', 'MM/DD/YY'), TO_DATE('03/03/23', 'MM/DD/YY'), 360000, '202200003');
+INSERT INTO PreviousRental VALUES ('50 허 6894', TO_DATE('03/02/23', 'MM/DD/YY'), TO_DATE('03/08/23', 'MM/DD/YY'), 840000, '202200001');
+INSERT INTO PreviousRental VALUES ('50 허 4313', TO_DATE('03/20/23', 'MM/DD/YY'), TO_DATE('03/21/23', 'MM/DD/YY'), 200000, '202300002');
+INSERT INTO PreviousRental VALUES ('50 허 9450', TO_DATE('03/24/23', 'MM/DD/YY'), TO_DATE('03/28/23', 'MM/DD/YY'), 650000, '202300001');
+INSERT INTO PreviousRental VALUES ('50 허 6589', TO_DATE('02/02/23', 'MM/DD/YY'), TO_DATE('02/04/23', 'MM/DD/YY'), 390000, '202300001');
+INSERT INTO PreviousRental VALUES ('50 허 9450', TO_DATE('02/03/23', 'MM/DD/YY'), TO_DATE('02/06/23', 'MM/DD/YY'), 520000, '202200001');
+INSERT INTO PreviousRental VALUES ('50 허 2314', TO_DATE('02/09/23', 'MM/DD/YY'), TO_DATE('02/12/23', 'MM/DD/YY'), 400000, '202200003');
+INSERT INTO PreviousRental VALUES ('50 허 3158', TO_DATE('02/09/23', 'MM/DD/YY'), TO_DATE('02/15/23', 'MM/DD/YY'), 980000, '202300003');
+INSERT INTO PreviousRental VALUES ('50 허 6894', TO_DATE('02/13/23', 'MM/DD/YY'), TO_DATE('02/19/23', 'MM/DD/YY'), 840000, '202200001');
+INSERT INTO PreviousRental VALUES ('50 허 6703', TO_DATE('02/21/23', 'MM/DD/YY'), TO_DATE('02/24/23', 'MM/DD/YY'), 480000, '202300002');
 
-INSERT INTO PreviousRental VALUES ('180001', TO_DATE('03/01/23', 'MM/DD/YY'), TO_DATE('03/03/23', 'MM/DD/YY'), 120000, '202200003');
-INSERT INTO PreviousRental VALUES ('180002', TO_DATE('03/02/23', 'MM/DD/YY'), TO_DATE('03/08/23', 'MM/DD/YY'), 315000, '202200001');
-INSERT INTO PreviousRental VALUES ('190004', TO_DATE('03/20/23', 'MM/DD/YY'), TO_DATE('03/21/23', 'MM/DD/YY'), 120000, '202300002');
-INSERT INTO PreviousRental VALUES ('190002', TO_DATE('03/24/23', 'MM/DD/YY'), TO_DATE('03/28/23', 'MM/DD/YY'), 225000, '202300001');
-INSERT INTO PreviousRental VALUES ('200001', TO_DATE('02/02/23', 'MM/DD/YY'), TO_DATE('02/04/23', 'MM/DD/YY'), 165000, '202300001');
-INSERT INTO PreviousRental VALUES ('200002', TO_DATE('02/03/23', 'MM/DD/YY'), TO_DATE('02/06/23', 'MM/DD/YY'), 280000, '202200001');
-INSERT INTO PreviousRental VALUES ('190004', TO_DATE('02/09/23', 'MM/DD/YY'), TO_DATE('02/12/23', 'MM/DD/YY'), 240000, '202200003');
-INSERT INTO PreviousRental VALUES ('180002', TO_DATE('02/09/23', 'MM/DD/YY'), TO_DATE('02/15/23', 'MM/DD/YY'), 315000, '202300003');
-INSERT INTO PreviousRental VALUES ('200002', TO_DATE('02/13/23', 'MM/DD/YY'), TO_DATE('02/19/23', 'MM/DD/YY'), 490000, '202200001');
-INSERT INTO PreviousRental VALUES ('210001', TO_DATE('02/21/23', 'MM/DD/YY'), TO_DATE('02/24/23', 'MM/DD/YY'), 240000, '202300002');
-INSERT INTO PreviousRental VALUES ('210001', TO_DATE('01/02/23', 'MM/DD/YY'), TO_DATE('01/10/23', 'MM/DD/YY'), 540000, '202300003');
-INSERT INTO PreviousRental VALUES ('190003', TO_DATE('01/09/23', 'MM/DD/YY'), TO_DATE('01/11/23', 'MM/DD/YY'), 165000, '202200001');
-INSERT INTO PreviousRental VALUES ('200002', TO_DATE('01/12/23', 'MM/DD/YY'), TO_DATE('01/15/23', 'MM/DD/YY'), 280000, '202300001');
-INSERT INTO PreviousRental VALUES ('180001', TO_DATE('01/20/23', 'MM/DD/YY'), TO_DATE('01/22/23', 'MM/DD/YY'), 120000, '202300002');
-INSERT INTO PreviousRental VALUES ('210001', TO_DATE('01/21/23', 'MM/DD/YY'), TO_DATE('01/24/23', 'MM/DD/YY'), 240000, '202200001');
 SELECT * FROM PreviousRental;
+
+COMMIT;
+

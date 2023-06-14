@@ -1,11 +1,37 @@
 <!DOCTYPE html>
 <head>
+    <style type="text/css">
+         * {
+            font-size: 20px;
+        }
+        body {
+            margin: 30px;
+        }
+        table {
+            width: 100%;
+            border: 1px solid #444;
+            border-collapse: collapse;
+            text-align: center;
+            box-shadow: 1px 1px;
+        }
+        tr, td, th {
+            border: 1px solid #444;
+            padding: 4px;
+        }
+        button {
+            font-size: 15px;
+        }
+        h2 {
+            margin-left: 15px;
+            font-size: 27px;
+        }
+    </style>
     <title>예약 취소 화면</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body onload="javascript:show_my_reservation()">
-    <h1 onclick="To_main()">CNU RentCar</h1>
+    <h1 onclick="To_main()"><Img src="./Logo.png"></Img></h1>
     <br>
     <div id="reservedDiv">
         <h2>나의 예약 내역</h2>

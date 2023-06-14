@@ -23,6 +23,7 @@
         $_SESSION['email'] = $row[1];
         $_SESSION['id'] = $ID;
     }
+    $_SESSION['todayDate'] = '2023-06-21';
 
     if(!isset($_SESSION['name']) || !isset($_SESSION['email'])) {
         echo ("<script>
@@ -32,6 +33,6 @@
         session_destroy();
     } else {
         if($_SESSION['name'] == '관리자') header('Location: root_main.php');
-        else header('Location: user_main.php');
+        else header('Location: user_main.html');
     }
 ?>

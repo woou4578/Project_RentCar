@@ -1,6 +1,6 @@
 <?php 
     session_start();
-    if(!isset($_SESSION['name'])) header('Location: http://localhost/CNU_RENTCAR/login.php');
+    if(!isset($_SESSION['name'])) header('Location: login.php');
     $tns = "
     (DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521)))
     (CONNECT_DATA=(SERVICE_NAME=XE)))";
@@ -16,12 +16,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style type="text/css">
+         * {
+            font-size: 20px;
+        }
+        body {
+            margin: 30px;
+        }
+        table {
+            width: 100%;
+            border: 1px solid #444;
+            border-collapse: collapse;
+            text-align: center;
+            box-shadow: 1px 1px;
+        }
+        tr, td, th {
+            border: 1px solid #444;
+            padding: 4px;
+        }
+        button {
+            font-size: 15px;
+        }
+        h2 {
+            margin-left: 15px;
+            font-size: 27px;
+        }
+    </style>
     <title>렌트카 통계 화면</title>
 </head>
 <body>
-    <h1 onclick="To_main()">CNU RentCar</h1>
+    <h1 onclick="To_main()"><Img src="./Logo.png"></Img></h1>
 
-    <h2 onclick="toggle_div('1')">렌트카별 이전 렌트 횟수와 총 수입	▼</h2>
+    <h2 onclick="toggle_div('1')">렌트카별 이전 렌트 횟수와 총 수입 ▼</h2>
     <div style="display:none" id='1'>
         <table>
             <thead>
@@ -51,7 +77,7 @@
         </table>
     </div>
     <br>
-    <h2 onclick="toggle_div('2')">최근 반납된 렌트카 기록 (10대) &nbsp;&nbsp;&nbsp;&nbsp;▼</h2>
+    <h2 onclick="toggle_div('2')">최근 반납된 렌트카 기록 (10대) ▼</h2>
     <div style="display:none" id='2'>
             <table>
                 <thead>
@@ -85,7 +111,7 @@
         </table>
     </div>
     <br>
-    <h2 onclick="toggle_div('3')">고객별 렌트 횟수와 총 결제 금액 &nbsp;&nbsp;&nbsp;▼</h2>
+    <h2 onclick="toggle_div('3')">고객별 렌트 횟수와 총 결제 금액 ▼</h2>
     <div style="display:none" id='3'>
             <table>
                 <thead>
@@ -125,7 +151,7 @@
         </table>
     </div>
     <br>
-    <h2 onclick="toggle_div('4')">회사에서 인기많은 차량과 순위 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼</h2>
+    <h2 onclick="toggle_div('4')">회사에서 인기많은 차량과 순위 ▼</h2>
     <div style="display:none" id='4'>
             <table>
                 <thead>
@@ -139,10 +165,7 @@
                 <tbody>
                 <?php
                 $sql = "SELECT AA.모델명, AA.횟수, RANK() OVER (ORDER BY AA.횟수 DESC), AA.수익
-                FROM (SELECT R1.MODELNAME 모델명, COUNT(*) 횟수, SUM(PAYMENT) 수익 
-                FROM PREVIOUSRENTAL P1, RENTCAR R1
-                WHERE P1.LICENSEPLATENO = R1.LICENSEPLATENO
-                GROUP BY R1.MODELNAME) AA";
+                    FROM (SELECT R1.MODELNAME 모델명, COUNT(*) 횟수, SUM(PAYMENT) 수익 FROM PREVIOUSRENTAL P1, RENTCAR R1 WHERE P1.LICENSEPLATENO = R1.LICENSEPLATENO GROUP BY R1.MODELNAME) AA";
                 $stmt = $conn -> prepare($sql);
                 $stmt -> execute();
                 while ($row = $stmt -> fetch(PDO::FETCH_NUM)) {
@@ -152,13 +175,11 @@
                         <td><?= $row[1] ?></td>
                         <td><?= $row[2] ?></td>
                         <td><?= $row[3] ?></td>
-                        <td><?= $row[4] ?></td>
                     </tr>
                 <?php } ?>
                 </tbody>
         </table>
     </div>
-
 </body>
 </html>
 

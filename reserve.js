@@ -1,17 +1,29 @@
 const searchButton = document.getElementById("searchButton")
 var startDate = document.getElementById("startDate");
 var endDate = document.getElementById("endDate");
-var vehicleType = document.querySelector('#mySelect');
+var vehicleType = document.getElementsByName('vehicleType');
 var reserveDiv = document.getElementById('reserveDiv');
 const reserveTable = document.getElementById('reserveTable');
 const reserveButton = document.getElementById("reserveButton");
 
+function To_main() {
+    if(document.getElementsByTagName("span")[0].getAttribute("id") == '관리자') location.href="./root_main.php";
+    else location.href="./user_main.html";
+}
 
 function check_valid_input() {
+    var isChecked = false;
+    for(var i=0; i<vehicleType.length; i++) {
+        if(vehicleType[i].checked == true) {
+            isChecked = true;
+            break;
+        }
+    }
+
     if((startDate.value == "" || endDate.value == "") || startDate.value > endDate.value) {
         alert("날짜를 제대로 입력해주세요.");   
         return false;
-    }else if(vehicleType.value == "") {
+    }else if(!isChecked) {
         alert("차종을 제대로 선택해주세요.");
         return false;
     }
@@ -21,13 +33,18 @@ function check_valid_input() {
 function click_search() {
     if(check_valid_input()) {
         reserveDiv.style.display = "block";
+        var arr = new Array();
+        for(var i=0; i<vehicleType.length; i++) {
+            if(vehicleType[i].checked == true) arr.push(vehicleType[i].value);
+        }
+    
         $.ajax({    
             url: 'reserve_table.php',
             type: 'GET',
             data: {
                 firstDate : startDate.value,
                 secondDate : endDate.value,
-                vType : vehicleType.value
+                vType : arr
             },success:function(data) {
                 document.getElementById("reserveTable").innerHTML = data;
             },
@@ -59,7 +76,7 @@ function add_reserve() {
                 carNumber : selectedCarNumber
             },success:function(data) {
                 alert(data);
-                window.location.href = 'user_main.php';
+                window.location.href = 'user_main.html';
             },
             error:function(e) {
                 alert(e.reponseText);
@@ -67,8 +84,6 @@ function add_reserve() {
         });
     }
 }
-function To_main() {
-    location.href = "user_main.php";
-}
+
 reserveButton.addEventListener("click", add_reserve);
 searchButton.addEventListener("click", click_search);

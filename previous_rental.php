@@ -8,7 +8,7 @@
     $username = 'CNU_RENTCAR';
     $password = '0000';
     $startDate = $_GET['startDate'] ?? "2023-01-01";
-    $endDate = $_GET['endDate'] ?? "2023-05-01";
+    $endDate = $_GET['endDate'] ?? "2023-06-01";
     try {
         $conn = new PDO($url, $username, $password);
     } catch (PDOException $e) {
@@ -19,14 +19,40 @@
 <html lang="en">
 <head>
     <title>이전 대여 기록 화면</title>
+    <style type="text/css">
+        * {
+            font-size: 20px;
+        }
+        body {
+            margin: 30px;
+        }
+        table {
+            width: 100%;
+            border: 1px solid #444;
+            border-collapse: collapse;
+            text-align: center;
+            box-shadow: 1px 1px;
+        }
+        tr, td, th {
+            border: 1px solid #444;
+            padding: 4px;
+        }
+        button {
+            font-size: 15px;
+        }
+        h2 {
+            margin-left: 15px;
+            font-size: 27px;
+        }
+    </style>
 </head>
 <body>
-    <h1 onclick="To_main()">CNU RentCar</h1>
-    <form action = "logout.php">
+    <h1 onclick="To_main()"><Img src="./Logo.png"></Img></h1>
+    <form action = "logout.php" style="position: absolute; right: 30px;">
         <span>어서오세요! <?php echo $_SESSION['name']?> 님!</span>
         <button>로그아웃</button>
     </form>
-
+    <br>
     <h2>나의 이전 대여 내역</h2>
     <table>
         <thead>
@@ -73,13 +99,13 @@
     ?>
         </tbody>
     </table>
-
+    <br>
     <form>
         <div>
             <label for="startDate"> 검색 시작 날짜 : </label>
-            <input type="date" id="startDate" name="startDate" max="2023-05-01" value="<?= $searchWord ?>"> ~ 
+            <input type="date" id="startDate" name="startDate" value="<?= $searchWord ?>"> ~ 
             <label for="endDate"> 검색 종료 날짜 : </label>
-            <input type="date" id="endDate" name="endDate" max="2023-05-01" value="<?= $searchWord ?>">
+            <input type="date" id="endDate" name="endDate" value="<?= $searchWord ?>">
         </div>
         <br>
         <div>
@@ -92,6 +118,6 @@
 <script>
     function To_main() {
         if(document.getElementsByTagName("span")[0].getAttribute("id") == '관리자') location.href="./root_main.php";
-        else location.href="./user_main.php";
+        else location.href="./user_main.html";
     }
 </script>

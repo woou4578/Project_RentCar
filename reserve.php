@@ -19,7 +19,7 @@ try {
     echo ("에러 내용: " . $e->getMessage());
 }
 
-$today = date('m/d/y', strtotime("20230502"));
+$today = date('m/d/y', strtotime("20230621"));
 $newStartDate = date('m/d/y', strtotime($startDate));
 $newEndDate = date('m/d/y', strtotime($endDate));
 

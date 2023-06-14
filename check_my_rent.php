@@ -12,38 +12,38 @@ try {
 } catch (PDOException $e) {
     echo ("에러 내용: " . $e->getMessage());
 }
+$today = date('m/d/y', strtotime($_SESSION['todayDate']));
 
-
-$sql = "SELECT R.licensePlateNo, R.modelName, Car.vehicleType, R.dateRented, R.returnDate, (R.returnDate - R.dateRented + 1)*Car.rentRatePerDay FROM RentCar R, CarModel Car, Customer C
-    WHERE C.name = ? AND C.cno = R.cno AND R.modelName = Car.modelName";
-$stmt = $conn -> prepare($sql);
-$stmt -> execute(array($_SESSION['name']));
-$numnum = 0;
-while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-    $numnum ++;
-}
-if($numnum != 0) {
-    echo "
+echo "<tr>
+        <th rowspan='2'>차량번호</th>
+        <th rowspan='2'>모델명</th>
+        <th rowspan='2'>차종</th>
+        <th rowspan='2'>빌린 날짜</th>
+        <th rowspan='2'>반납 기한</th>
+        <th colspan='2'>예상 결제 비용</th>
+    </tr> 
     <tr>
-        <th>차량번호</th>
-        <th>모델명</th>
-        <th>차종</th>
-        <th>빌린 날짜</th>
-        <th>반납 기한</th>
-        <th>예상 결제 비용</th>
+        <td>오늘까지</td>
+        <td>기한까지</td>
     </tr>";
-    $stmt = $conn -> prepare($sql);
-    $stmt -> execute(array($_SESSION['name']));
-    while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-        echo "<td>".$row[0]."</td>";
-        echo "<td>".$row[1]."</td>";
-        echo "<td>".$row[2]."</td>";
-        echo "<td>".$row[3]."</td>";
-        echo "<td>".$row[4]."</td>";
-        echo "<td>".$row[5]."</td>";
-        echo "</tr>";
-    }
-}else {
-    echo -1;
+
+$sql = "SELECT R.licensePlateNo, R.modelName, Car.vehicleType, R.dateRented, R.returnDate, (TO_DATE(:todayDate, 'MM/DD/YY') - R.dateRented + 1)*Car.rentRatePerDay, (R.returnDate - R.dateRented + 1)*Car.rentRatePerDay 
+    FROM RentCar R, CarModel Car, Customer C WHERE C.name = :name AND C.cno = R.cno AND R.modelName = Car.modelName";
+$stmt = $conn -> prepare($sql);
+$stmt -> bindParam(':todayDate', $today, PDO::PARAM_STR);
+$stmt -> bindParam(':name', $_SESSION['name'], PDO::PARAM_STR);
+$stmt -> execute();
+$count = 0;
+while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+    echo "<tr>";
+    echo "<td>".$row[0]."</td>";
+    echo "<td>".$row[1]."</td>";
+    echo "<td>".$row[2]."</td>";
+    echo "<td>".$row[3]."</td>";
+    echo "<td>".$row[4]."</td>";
+    echo "<td>".$row[5]."</td>";
+    echo "<td>".$row[6]."</td>";
+    echo "</tr>";
+    $count++;
 }
 ?>
