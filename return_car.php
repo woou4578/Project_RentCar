@@ -2,13 +2,7 @@
 session_start();
 if (!isset($_SESSION['name'])) header('Location: login.php');
 
-// use PHPMailer\PHPMailer\PHPMailer;
-// use PHPMailer\PHPMailer\Exception;
-// use PHPMailer\PHPMailer\SMTP;
-
-// include("./PHPMailer/src/PHPMailer.php");
-// include("./PHPMailer/src/Exception.php");
-// include("./PHPMailer/src/SMTP.php");
+include("./Mailer.php");
 
 $tns = "
     (DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521)))
@@ -37,30 +31,5 @@ $sql2 = "UPDATE RENTCAR SET DATERENTED = NULL, RETURNDATE = NULL, CNO = NULL WHE
 $stmt = $conn->prepare($sql2);
 $stmt -> execute();
 
-// $from_id = "cnu.rentcar10@gmail.com";
-// $pw = "cnurentcar10!";
-// $title = "반납 완료 안내 메일 - CNU_RentCar";
-// $article = "반납했습니다.";
-
-// $smtp = 'smtp.office365.com';
-// $mail = new PHPMailer(true);
-// $mail->IsSMTP();
-// try {
-//     $mail->Host = $smtp;
-//     $mail->SMTPAuth = true;
-//     $mail->Port = 465;
-//     $mail->SMTPSecure = "ssl";
-//     $mail->Username = $from_id;
-//     $mail->Password = $pw;
-//     $mail->CharSet = "UTF-8";
-//     $mail->SetFrom($from_id);
-//     $mail->AddAddress("haijun79@naver.com");
-//     $mail->Subject = $title;
-//     $mail->MsgHTML($article);
-//     $mail->Send();
-// } catch (phpmailerException $e) {
-//     echo $e->errorMessage();
-// } catch (Exception $e) {
-//     echo $e->getMessage();
-// }
+mailer("woou4578@naver.com", "반납 완료 안내 메일 - CNU_RentCar", $carNumber."차량에 대한 반납이 완료되었습니다.<br> 청구 금액은 ".$payment."원 입니다.");
 ?>
