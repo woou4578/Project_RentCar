@@ -1,10 +1,12 @@
 const rented = document.getElementById('rented');
 const returnButton = document.getElementById('returnButton');
 
+// 메인 화면으로 이동
 function To_main() {
-    location.href="./user_main.html";
+    location.href = "./user_main.html";
 }
 
+// check_my_rent.php로 현재 렌트 중인 차량 확인
 function check_my_rent() {
     $.ajax({
         url: 'check_my_rent.php',
@@ -12,7 +14,7 @@ function check_my_rent() {
         data: {},
         success: function (data) {
             rented.innerHTML = data;
-            if(rented.children[0].childElementCount == 2) {
+            if (rented.children[0].childElementCount == 2) {
                 alert('현재 렌트 중인 차량이 없습니다!');
                 To_main();
             };
@@ -23,27 +25,28 @@ function check_my_rent() {
     });
 }
 
+// return_car.php로 차량 반납
 function return_car() {
     var table_value = rented.children[0].children[2];
     var carNum = table_value.children[0].innerHTML ?? '';
     var firstDate = table_value.children[3].innerHTML ?? '';
     var secondDate = table_value.children[4].innerHTML ?? '';
     var cost = table_value.children[5].innerHTML ?? '';
-    if(carNum.length > 0) {
-        $.ajax({    
+    if (carNum.length > 0) {
+        $.ajax({
             url: 'return_car.php',
             type: 'GET',
-            data: { 
+            data: {
                 carNumber: carNum,
                 rentDate: firstDate,
                 returnDate: secondDate,
                 payment: cost
             },
-            success:function() {
+            success: function () {
                 alert('반납 완료!');
                 location.href = 'user_main.html';
             },
-            error:function(e) {
+            error: function (e) {
                 alert(e.reponseText);
             }
         });

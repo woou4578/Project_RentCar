@@ -1,31 +1,37 @@
-<?php 
-    session_start();
-    if(!isset($_SESSION['name'])) header('Location: login.php');
-    $tns = "
-    (DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521)))
+<?php
+// 로그인 확인 
+session_start();
+if (!isset($_SESSION['name']))
+    header('Location: login.php');
+
+// DB 연결 설정    
+$tns = "(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521)))
     (CONNECT_DATA=(SERVICE_NAME=XE)))";
-    $url = "oci:dbname=".$tns.";charset=utf8";
-    $username = 'CNU_RENTCAR';
-    $password = '0000';
-    $startDate = $_GET['startDate'] ?? "2023-01-01";
-    $endDate = $_GET['endDate'] ?? "2023-06-01";
-    try {
-        $conn = new PDO($url, $username, $password);
-    } catch (PDOException $e) {
-        echo("에러 내용: ".$e -> getMessage());
-    }
+$url = "oci:dbname=" . $tns . ";charset=utf8";
+$username = 'CNU_RENTCAR';
+$password = '0000';
+$startDate = $_GET['startDate'] ?? "2023-01-01";
+$endDate = $_GET['endDate'] ?? $_SESSION['todayDate'];
+try {
+    $conn = new PDO($url, $username, $password);
+} catch (PDOException $e) {
+    echo ("에러 내용: " . $e->getMessage());
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>이전 대여 기록 화면</title>
     <style type="text/css">
         * {
             font-size: 20px;
         }
+
         body {
             margin: 30px;
         }
+
         table {
             width: 100%;
             border: 1px solid #444;
@@ -33,23 +39,31 @@
             text-align: center;
             box-shadow: 1px 1px;
         }
-        tr, td, th {
+
+        tr,
+        td,
+        th {
             border: 1px solid #444;
             padding: 4px;
         }
+
         button {
             font-size: 15px;
         }
+
         h2 {
             margin-left: 15px;
             font-size: 27px;
         }
     </style>
 </head>
+
 <body>
-    <h1 onclick="To_main()"><Img src="./Logo.png"></Img></h1>
-    <form action = "logout.php" style="position: absolute; right: 30px;">
-        <span>어서오세요! <?php echo $_SESSION['name']?> 님!</span>
+    <h1 onclick="To_main()"><Img src="./Logo.png"></Img></h1>           <!-- 메인 배너 -->
+    <form action="logout.php" style="position: absolute; right: 30px;"> <!-- 회원 정보 & 로그아웃 버튼 -->
+        <span>어서오세요!
+            <?php echo $_SESSION['name'] ?> 님!
+        </span>
         <button>로그아웃</button>
     </form>
     <br>
@@ -66,44 +80,60 @@
             </tr>
         </thead>
         <tbody>
-    <?php
-    if(strtotime($startDate) > strtotime($endDate)) {
-        echo "<script>alert('날짜를 확인해주세요');
+            <?php
+            // 검색하려는 날짜 유효성 확인
+            if (strtotime($startDate) > strtotime($endDate)) {
+                echo "<script>alert('날짜를 확인해주세요');
         location.href='./previous_rental.php';</script>";
-    }
-    $sql = "SELECT P.licensePlateNo, R.modelName, Car.vehicleType, P.dateRented, P.dateReturned, P.payment FROM PreviousRental P, RentCar R, CarModel Car, Customer C
+            }
+
+            // 입력받은 날짜 조건으로 이전 기록 검색
+            $sql = "SELECT P.licensePlateNo, R.modelName, Car.vehicleType, P.dateRented, P.dateReturned, P.payment FROM PreviousRental P, RentCar R, CarModel Car, Customer C
         WHERE C.cno = :cno AND C.cno = P.cno AND P.licensePlateNo = R.licensePlateNo AND R.modelName = Car.modelName AND TO_DATE(:startDate, 'YYYY/MM/DD') <= P.dateRented AND P.dateReturned <= TO_DATE(:endDate, 'YYYY/MM/DD')
         ORDER BY 5 DESC";
-    $stmt = $conn -> prepare($sql);
-    $stmt -> bindParam(':cno', $_SESSION['id'], PDO::PARAM_STR);
-    $stmt -> bindParam(':startDate', $startDate, PDO::PARAM_STR);
-    $stmt -> bindParam(':endDate', $endDate, PDO::PARAM_STR);
-    $stmt -> execute();
-    $num = 0;
-    while ($row = $stmt -> fetch(PDO::FETCH_NUM)) {
-    ?>
-        <tr>
-            <td><?= $row[0] ?></td>
-            <td><?= $row[1] ?></td>
-            <td><?= $row[2] ?></td>
-            <td><?= $row[3] ?></td>
-            <td><?= $row[4] ?></td>
-            <td><?= $row[5] ?></td>
-            <?php $num++; ?>
-        </tr>
-    <?php } 
-    if ($num == 0) {
-        echo "<script>alert('날짜를 확인해주세요');
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':cno', $_SESSION['id'], PDO::PARAM_STR);
+            $stmt->bindParam(':startDate', $startDate, PDO::PARAM_STR);
+            $stmt->bindParam(':endDate', $endDate, PDO::PARAM_STR);
+            $stmt->execute();
+            $num = 0;
+            while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+                ?>
+                <tr>
+                    <td>
+                        <?= $row[0] ?>
+                    </td>
+                    <td>
+                        <?= $row[1] ?>
+                    </td>
+                    <td>
+                        <?= $row[2] ?>
+                    </td>
+                    <td>
+                        <?= $row[3] ?>
+                    </td>
+                    <td>
+                        <?= $row[4] ?>
+                    </td>
+                    <td>
+                        <?= $row[5] ?>
+                    </td>
+                    <?php $num++; ?>
+                </tr>
+            <?php }
+            // 검색 결과가 없는 경우
+            if ($num == 0) {
+                echo "<script>alert('검색 결과가 없습니다!');
         location.href='./previous_rental.php';</script>";
-    }
-    ?>
+            }
+            ?>
         </tbody>
     </table>
     <br>
     <form>
         <div>
             <label for="startDate"> 검색 시작 날짜 : </label>
-            <input type="date" id="startDate" name="startDate" value="<?= $searchWord ?>"> ~ 
+            <input type="date" id="startDate" name="startDate" value="<?= $searchWord ?>"> ~
             <label for="endDate"> 검색 종료 날짜 : </label>
             <input type="date" id="endDate" name="endDate" value="<?= $searchWord ?>">
         </div>
@@ -113,11 +143,13 @@
         </div>
     </form>
 </body>
+
 </html>
 
 <script>
+    // 배너 클릭시 메인 화면으로 이동
     function To_main() {
-        if(document.getElementsByTagName("span")[0].getAttribute("id") == '관리자') location.href="./root_main.php";
-        else location.href="./user_main.html";
+        if (document.getElementsByTagName("span")[0].getAttribute("id") == '관리자') location.href = "./root_main.php";
+        else location.href = "./user_main.html";
     }
 </script>

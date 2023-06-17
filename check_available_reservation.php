@@ -1,6 +1,6 @@
-<?php 
-error_reporting( E_ALL );
-ini_set( "display_errors", 1 );
+<?php
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 ?>
 
 <?php
@@ -8,9 +8,12 @@ $startDate = $_GET['firstDate'] ?? '';
 $endDate = $_GET['secondDate'] ?? '';
 $vehicleType = $_GET['vType'] ?? '';
 
+// 로그인 확인
 session_start();
 if (!isset($_SESSION['name']))
     header('Location: login.php');
+
+// DB 연결
 $tns = "
     (DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521)))
     (CONNECT_DATA=(SERVICE_NAME=XE)))";
@@ -23,33 +26,35 @@ try {
     echo ("에러 내용: " . $e->getMessage());
 }
 
-
+// 전달받은 startdate와 enddate를 비교해 
+// 나의 예약 상태와 겹치는 날짜가 있는지 확인하는 부분
 $checkSQL = "SELECT
 CASE
     WHEN (R.STARTDATE NOT BETWEEN
-        TO_DATE('".$startDate."', 'YY/MM/DD') AND 
-        TO_DATE('".$endDate."', 'YY/MM/DD'))
+        TO_DATE('" . $startDate . "', 'YY/MM/DD') AND 
+        TO_DATE('" . $endDate . "', 'YY/MM/DD'))
         AND( R.ENDDATE NOT BETWEEN 
-        TO_DATE('".$startDate."', 'YY/MM/DD') AND
-        TO_DATE('".$endDate."', 'YY/MM/DD'))
+        TO_DATE('" . $startDate . "', 'YY/MM/DD') AND
+        TO_DATE('" . $endDate . "', 'YY/MM/DD'))
     THEN '가능'
     ELSE '불가능'
 END AS bb 
 FROM RESERVATION R
-WHERE CNO = '".$_SESSION['id']."'";
-$stmt = $conn -> prepare($checkSQL);
-$stmt -> execute();
+WHERE CNO = '" . $_SESSION['id'] . "'";
+$stmt = $conn->prepare($checkSQL);
+$stmt->execute();
 
 $valval = "";
-while ($row = $stmt -> fetch(PDO::FETCH_NUM)) {
-    if($row[0] == "불가능") {
+while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+    if ($row[0] == "불가능") {
         $valval = "불가능";
         break;
     }
 }
 
+// 날짜가 겹쳐 불가능한 경우 예약 가능한 차가 없습니다를 출력
 if ($valval == "불가능") {
-  echo "예약 가능한 차가 없습니다.";  
+    echo "예약 가능한 차가 없습니다.";
 } else {
     echo "<tr><th>선택</th><th>차번호</th>
     <th>모델명</th><th>차종</th><th>옵션</th></tr>";
@@ -71,6 +76,8 @@ if ($valval == "불가능") {
         $selectSpecificType2 = "AND C2.VEHICLETYPE IN " . $arr;
     }
 
+    // 예약 정보와 현재 렌탈중인 차량의 날짜들을 비교해 날짜가 겹치지 않는 경우,
+    // 예약 가능한 차량들을 테이블에 보여주는 부분
     $sql = " SELECT DISTINCT R1.LICENSEPLATENO, R1.MODELNAME, C1.VEHICLETYPE, 
     LISTAGG(O1.optionName, ', ') WITHIN GROUP (ORDER BY O1.optionName) OVER (PARTITION BY O1.licensePlateNo)
     FROM RENTCAR R1, CARMODEL C1, OPTIONS O1
@@ -91,7 +98,8 @@ if ($valval == "불가능") {
         OR R2.DATERENTED > TO_DATE('" . $endDate . "', 'YYYY-MM-DD')))
         AND R2.MODELNAME = C2.MODELNAME " . $selectSpecificType2 . "
         AND R2.LICENSEPLATENO = O2.LICENSEPLATENO ORDER BY 2";
-
+    
+    // 탐색된 예약 가능한 차량들을 table로 표시
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
@@ -103,9 +111,4 @@ if ($valval == "불가능") {
         echo "</tr>";
     }
 }
-
-
-
-
-    
 ?>
