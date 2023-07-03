@@ -6,6 +6,7 @@ Database 기술을 활용한 프로젝트
 Project Begin : 2023/04/07
 <br/>
 Project End : 2023/06/21
+<hr/>
 
 <br/>
 - Oracle DB를 사용해 렌트카 회사에 대한 DB 구성
