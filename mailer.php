@@ -13,7 +13,7 @@ function mailer($to_id, $tit, $cont)
 
   // 발신자 정보 & 이메일 내용 구성
   $from_id = "cnu.rentcar10@gmail.com";
-  $pw = "laiqgkavijomsrde";
+  $pw = ""; //전달받은 비밀번호는 입력
   $title = $tit;
   $article = $cont;
 
